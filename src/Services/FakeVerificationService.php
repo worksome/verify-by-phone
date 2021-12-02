@@ -10,7 +10,7 @@ use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
 final class FakeVerificationService implements PhoneVerificationService
 {
     /**
-     * @var array<int, PhoneNumber>
+     * @var array<int, string>
      */
     private array $verifications = [];
 
@@ -26,7 +26,7 @@ final class FakeVerificationService implements PhoneVerificationService
 
     public function send(PhoneNumber $number): void
     {
-        $this->verifications[] = $number;
+        $this->verifications[] = $number->formatE164();
 
         if ($this->sendUsing) {
             $this->sendUsing->__invoke($number);
@@ -68,7 +68,7 @@ final class FakeVerificationService implements PhoneVerificationService
      */
     public function assertSentVerification(PhoneNumber $number): self
     {
-        Assert::assertContains($number, $this->verifications);
+        Assert::assertContains($number->formatE164(), $this->verifications);
 
         return $this;
     }
