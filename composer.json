@@ -17,8 +17,10 @@
     ],
     "require": {
         "php": "^8.0|^8.1",
+        "illuminate/contracts": "^8.73",
+        "propaganistas/laravel-phone": "^4.3",
         "spatie/laravel-package-tools": "^1.9.2",
-        "illuminate/contracts": "^8.73"
+        "twilio/sdk": "^6.31"
     },
     "require-dev": {
         "nunomaduro/collision": "^5.10",
@@ -59,10 +61,7 @@
         "laravel": {
             "providers": [
                 "Worksome\\VerifyByPhone\\VerifyByPhoneServiceProvider"
-            ],
-            "aliases": {
-                "VerifyByPhone": "Worksome\\VerifyByPhone\\Facades\\VerifyByPhone"
-            }
+            ]
         }
     },
     "minimum-stability": "dev",
