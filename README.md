@@ -1,9 +1,9 @@
-# :package_description
+# Verify your users by call or SMS
 
 ---
 This repo can be used to scaffold a Laravel package. Follow these steps to get started:
 
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this skeleton
+1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this verify-by-phone
 2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files
 3. Remove this block of text.
 4. Have fun creating your package.
@@ -17,19 +17,19 @@ This is where your description should go. Limit it to a paragraph or two. Consid
 You can install the package via composer:
 
 ```bash
-composer require :vendor_slug/:package_slug
+composer require worksome/verify-by-phone
 ```
 
 You can publish and run the migrations with:
 
 ```bash
-php artisan vendor:publish --tag=":package_slug_without_prefix-migrations"
+php artisan vendor:publish --tag="verify-by-phone_without_prefix-migrations"
 php artisan migrate
 ```
 
 You can publish the config file with:
 ```bash
-php artisan vendor:publish --tag=":package_slug_without_prefix-config"
+php artisan vendor:publish --tag="verify-by-phone_without_prefix-config"
 ```
 
 Optionally, you can publish the views using
@@ -48,8 +48,8 @@ return [
 ## Usage
 
 ```php
-$skeleton = new VendorName\Skeleton();
-echo $skeleton->echoPhrase('Hello, VendorName!');
+$verify-by-phone = new Worksome\VerifyByPhone();
+echo $verify-by-phone->echoPhrase('Hello, Worksome!');
 ```
 
 ## Testing
@@ -72,7 +72,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [:author_name](https://github.com/:author_username)
+- [Luke Downing](https://github.com/worksome)
 - [All Contributors](../../contributors)
 
 ## License

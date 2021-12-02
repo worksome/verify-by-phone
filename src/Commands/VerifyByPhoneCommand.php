@@ -1,12 +1,12 @@
 <?php
 
-namespace VendorName\Skeleton\Commands;
+namespace Worksome\VerifyByPhone\Commands;
 
 use Illuminate\Console\Command;
 
-class SkeletonCommand extends Command
+class VerifyByPhoneCommand extends Command
 {
-    public $signature = 'skeleton';
+    public $signature = 'verify-by-phone';
 
     public $description = 'My command';
 
