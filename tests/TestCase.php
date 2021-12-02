@@ -17,7 +17,7 @@ class TestCase extends Orchestra
         );
     }
 
-    protected function getPackageProviders($app)
+    protected function getPackageProviders($app): array
     {
         return [
             VerifyByPhoneServiceProvider::class,
@@ -28,9 +28,9 @@ class TestCase extends Orchestra
     {
         config()->set('database.default', 'testing');
 
-        /*
-        $migration = include __DIR__.'/../database/migrations/create_verify-by-phone_table.php.stub';
-        $migration->up();
-        */
+        // Create fake twilio credentials
+        config()->set('verify-by-phone.services.twilio.account_sid', 'aniofandioancdioscnaopdjnaocaejopiof');
+        config()->set('verify-by-phone.services.twilio.auth_token', 'naofnoapnwapodnwapodnawofpnawodnaw');
+        config()->set('verify-by-phone.services.twilio.verify_sid', 'aniofandioancdioscnaopdjnaocaejopiof');
     }
 }
