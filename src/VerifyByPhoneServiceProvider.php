@@ -20,19 +20,23 @@ class VerifyByPhoneServiceProvider extends PackageServiceProvider
 {
     public function registeringPackage(): void
     {
+        $this->app->singleton(PhoneVerificationService::class, static function (Application $app) {
+            /** @var VerifyByPhoneManager $manager */
+            $manager = $app->make(VerifyByPhoneManager::class);
+
+            return $manager->driver();
+        });
+    }
+
+    public function bootingPackage(): void
+    {
+        // We register in the boot method to allow a user to provide their own client if using the Twilio SDK.
         $this->app->singletonIf(Client::class, static function (Application $app) {
             return new Client(
                 username: strval($app['config']->get('verify-by-phone.services.twilio.account_sid', '')),
                 password: strval($app['config']->get('verify-by-phone.services.twilio.auth_token', '')),
                 httpClient: new TwilioHttpClient(),
             );
-        });
-
-        $this->app->singleton(PhoneVerificationService::class, static function (Application $app) {
-            /** @var VerifyByPhoneManager $manager */
-            $manager = $app->make(VerifyByPhoneManager::class);
-
-            return $manager->driver();
         });
     }
 
