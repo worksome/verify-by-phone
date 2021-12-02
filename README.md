@@ -1,7 +1,7 @@
 # Verify your users by call or SMS
 
-It's a common practice: a user signs up, you send an SMS to their phone with a code, they enter that code in your application
-and they're off to the races.
+It's a common practice: a user signs up, you send an SMS to their phone with a code, they enter that code in your
+application and they're off to the races.
 
 This package makes it simple to add this capability to your Laravel application.
 
@@ -21,13 +21,14 @@ php artisan vendor:publish --tag="verify-by-phone-config"
 
 ## Configuration
 
-This package is built to support multiple verification services. The primary service is [Twilio](https://www.twilio.com/).
-You may configure the service in the config file at `config/verify-by-phone.php` under `driver`, or by using the dedicated `.env` variable: `VERIFY_BY_PHONE_DRIVER`.
+This package is built to support multiple verification services. The primary service
+is [Twilio](https://www.twilio.com/). You may configure the service in the config file at `config/verify-by-phone.php`
+under `driver`, or by using the dedicated `.env` variable: `VERIFY_BY_PHONE_DRIVER`.
 
 ### `twilio`
 
-To use our Twilio integration, you'll need to provide an `account_sid`, `auth_token` and `verify_sid`. All of these
-can be set in the `config/verify-by-phone.php` file under `services.twilio`.
+To use our Twilio integration, you'll need to provide an `account_sid`, `auth_token` and `verify_sid`. All of these can
+be set in the `config/verify-by-phone.php` file under `services.twilio`.
 
 ## Usage
 
@@ -44,10 +45,11 @@ public function sendVerificationCode(Request $request, PhoneVerificationService 
 }
 ```
 
-It's as simple as that! Note that we are using `\Propaganistas\LaravelPhone\PhoneNumber` to safely parse
-numbers in different formats.
+It's as simple as that! Note that we are using `\Propaganistas\LaravelPhone\PhoneNumber` to safely parse numbers in
+different formats.
 
-Now, when a user receives their verification code, you'll want to check that it is valid. Use the `verify` method for this:
+Now, when a user receives their verification code, you'll want to check that it is valid. Use the `verify` method for
+this:
 
 ```php
 public function verifyCode(Request $request, PhoneVerificationService $verificationService)
@@ -64,26 +66,37 @@ public function verifyCode(Request $request, PhoneVerificationService $verificat
 }
 ```
 
-The first parameter is the phone number (again using `\Propaganistas\LaravelPhone\PhoneNumber`), and the second is the 
+The first parameter is the phone number (again using `\Propaganistas\LaravelPhone\PhoneNumber`), and the second is the
 verification code provided by the user.
 
 ## Testing
 
-When writing tests, you likely do not want to make real requests to services such as Twilio. To support testing, we provide a 
+When writing tests, you likely do not want to make real requests to services such as Twilio. To support testing, we
+provide a
 `FakeVerificationService` that can be used to mock the verification service. To use it, you should set an `env` variable
 in your `phpunit.xml` with the following value:
 
 ```xml
+
 <env name='VERIFY_BY_PHONE_DRIVER' value='null'/>
 ```
 
-Alternatively, you may manually swap out the integration in your test via using the `swap` method:
+Alternatively, you may manually swap out the integration in your test via using the `swap` method. The fake
+implementation has some useful testing methods you can use:
 
 ```php
 it('tests something to do with SMS verification', function () {
-    $this->swap(PhoneVerificationService::class, new FakeVerificationService());
+    $service = new FakeVerificationService();
+    $this->swap(PhoneVerificationService::class, $service);
+   
+    // Customise what happens when calling `send`
+    $service->sendUsing(fn () => throw new Exception('Something went wrong'));
     
-    // The rest of your test
+    // Customise what happens when calling `verify`
+    $service->verifyUsing(fn () => throw new Exception('Something went wrong'));
+    
+    // Assert that a verification was "sent" on the given number
+    $service->assertSentVerification(new PhonNumber('+44 01234567890'));
 });
 ```
 
