@@ -6,8 +6,10 @@ use Illuminate\Foundation\Application;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Twilio\Rest\Client;
-use Worksome\VerifyByPhone\Commands\VerifyByPhoneCommand;
+use Worksome\VerifyByPhone\Commands\SendVerificationCodeCommand;
+use Worksome\VerifyByPhone\Commands\VerifyVerificationCodeCommand;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
+use Worksome\VerifyByPhone\Services\Twilio\TwilioHttpClient;
 
 class VerifyByPhoneServiceProvider extends PackageServiceProvider
 {
@@ -15,8 +17,9 @@ class VerifyByPhoneServiceProvider extends PackageServiceProvider
     {
         $this->app->singletonIf(Client::class, static function (Application $app) {
             return new Client(
-                strval($app['config']->get('verify-by-phone.services.twilio.account_sid', '')),
-                strval($app['config']->get('verify-by-phone.services.twilio.auth_token', ''))
+                username: strval($app['config']->get('verify-by-phone.services.twilio.account_sid', '')),
+                password: strval($app['config']->get('verify-by-phone.services.twilio.auth_token', '')),
+                httpClient: new TwilioHttpClient(),
             );
         });
 
@@ -34,7 +37,9 @@ class VerifyByPhoneServiceProvider extends PackageServiceProvider
             ->name('verify-by-phone')
             ->hasConfigFile()
             ->hasViews()
-            ->hasMigration('create_verify-by-phone_table')
-            ->hasCommand(VerifyByPhoneCommand::class);
+            ->hasCommands(
+                SendVerificationCodeCommand::class,
+                VerifyVerificationCodeCommand::class,
+            );
     }
 }

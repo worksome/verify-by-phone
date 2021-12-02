@@ -29,8 +29,8 @@ class TestCase extends Orchestra
         config()->set('database.default', 'testing');
 
         // Create fake twilio credentials
-        config()->set('verify-by-phone.services.twilio.account_sid', 'AC123');
-        config()->set('verify-by-phone.services.twilio.auth_token', 'foo');
-        config()->set('verify-by-phone.services.twilio.verify_sid', 'bar');
+        config()->set('verify-by-phone.services.twilio.account_sid', 'aniofandioancdioscnaopdjnaocaejopiof');
+        config()->set('verify-by-phone.services.twilio.auth_token', 'naofnoapnwapodnwapodnawofpnawodnaw');
+        config()->set('verify-by-phone.services.twilio.verify_sid', 'aniofandioancdioscnaopdjnaocaejopiof');
     }
 }
