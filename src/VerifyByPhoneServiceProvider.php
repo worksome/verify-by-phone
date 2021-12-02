@@ -36,7 +36,6 @@ class VerifyByPhoneServiceProvider extends PackageServiceProvider
         $package
             ->name('verify-by-phone')
             ->hasConfigFile()
-            ->hasViews()
             ->hasCommands(
                 SendVerificationCodeCommand::class,
                 VerifyVerificationCodeCommand::class,
