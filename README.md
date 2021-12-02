@@ -1,16 +1,9 @@
 # Verify your users by call or SMS
 
----
-This repo can be used to scaffold a Laravel package. Follow these steps to get started:
+It's a common practice: a user signs up, you send an SMS to their phone with a code, they enter that code in your application
+and they're off to the races.
 
-1. Press the "Use template" button at the top of this repo to create a new repo with the contents of this verify-by-phone
-2. Run "php ./configure.php" to run a script that will replace all placeholders throughout all the files
-3. Remove this block of text.
-4. Have fun creating your package.
-5. If you need help creating a package, consider picking up our <a href="https://laravelpackage.training">Laravel Package Training</a> video course.
----
-
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
+This package makes it simple to add this capability to your Laravel application.
 
 ## Installation
 
@@ -20,39 +13,81 @@ You can install the package via composer:
 composer require worksome/verify-by-phone
 ```
 
-You can publish and run the migrations with:
+You can publish the config file by running:
 
 ```bash
-php artisan vendor:publish --tag="verify-by-phone_without_prefix-migrations"
-php artisan migrate
+php artisan vendor:publish --tag="verify-by-phone-config"
 ```
 
-You can publish the config file with:
-```bash
-php artisan vendor:publish --tag="verify-by-phone_without_prefix-config"
-```
+## Configuration
 
-Optionally, you can publish the views using
+This package is built to support multiple verification services. The primary service is [Twilio](https://www.twilio.com/).
+You may configure the service in the config file at `config/verify-by-phone.php` under `driver`, or by using the dedicated `.env` variable: `VERIFY_BY_PHONE_DRIVER`.
 
-```bash
-php artisan vendor:publish --tag="example-views"
-```
+### `twilio`
 
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
+To use our Twilio integration, you'll need to provide an `account_sid`, `auth_token` and `verify_sid`. All of these
+can be set in the `config/verify-by-phone.php` file under `services.twilio`.
 
 ## Usage
 
+To use this package, you'll want to inject the `\Worksome\VerifyByPhone\Contracts\PhoneVerificationService`
+contract into your application. Let's imagine that you want to send the verification code in a controller method:
+
 ```php
-$verify-by-phone = new Worksome\VerifyByPhone();
-echo $verify-by-phone->echoPhrase('Hello, Worksome!');
+public function sendVerificationCode(Request $request, PhoneVerificationService $verificationService)
+{
+    // Send a verification code to the given number
+    $verificationService->send(new PhoneNumber($request->input('phone')));
+    
+    return redirect(route('home'))->with('message', 'Verification code sent!');
+}
 ```
 
+It's as simple as that! Note that we are using `\Propaganistas\LaravelPhone\PhoneNumber` to safely parse
+numbers in different formats.
+
+Now, when a user receives their verification code, you'll want to check that it is valid. Use the `verify` method for this:
+
+```php
+public function verifyCode(Request $request, PhoneVerificationService $verificationService)
+{
+    // Send a verification code to the given number
+    $valid = $verificationService->verify(
+        new PhoneNumber($request->input('phone')), 
+        $request->input('code')
+    );
+    
+    if ($valid) {
+        // Mark your user as valid
+    }
+}
+```
+
+The first parameter is the phone number (again using `\Propaganistas\LaravelPhone\PhoneNumber`), and the second is the 
+verification code provided by the user.
+
 ## Testing
+
+When writing tests, you likely do not want to make real requests to services such as Twilio. To support testing, we provide a 
+`FakeVerificationService` that can be used to mock the verification service. To use it, you should set an `env` variable
+in your `phpunit.xml` with the following value:
+
+```xml
+<env name='VERIFY_BY_PHONE_DRIVER' value='null'/>
+```
+
+Alternatively, you may manually swap out the integration in your test via using the `swap` method:
+
+```php
+it('tests something to do with SMS verification', function () {
+    $this->swap(PhoneVerificationService::class, new FakeVerificationService());
+    
+    // The rest of your test
+});
+```
+
+You may execute this project's tests by running:
 
 ```bash
 composer test
@@ -72,7 +107,7 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Luke Downing](https://github.com/worksome)
+- [Luke Downing](https://github.com/lukeraymonddowning)
 - [All Contributors](../../contributors)
 
 ## License
