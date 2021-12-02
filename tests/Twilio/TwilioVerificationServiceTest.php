@@ -6,6 +6,8 @@ use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Twilio\Rest\Client;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
+use Worksome\VerifyByPhone\Exceptions\FailedSendingVerificationCodeException;
+use Worksome\VerifyByPhone\Exceptions\UnsupportedNumberException;
 use Worksome\VerifyByPhone\Exceptions\VerificationCodeExpiredException;
 use Worksome\VerifyByPhone\Services\Twilio\TwilioVerificationService;
 use Worksome\VerifyByPhone\Tests\Concerns\FakesTwilioRequests;
@@ -46,6 +48,18 @@ it('can send a Twilio verification SMS', function () {
             && $url->endsWith('/Verifications');
     });
 });
+
+it('throws an UnsupportedNumberException if the number is unsupported', function () {
+    $this->fakeSendRequestWithError(TwilioVerificationService::ERROR_NUMBER_DOES_NOT_SUPPORT_SMS);
+
+    $this->service->send(new PhoneNumber('+44 01234567890'));
+})->throws(UnsupportedNumberException::class);
+
+it('throws a FailedSendingVerificationCodeException if something unknown goes wrong when sending', function () {
+    $this->fakeSendRequestWithError(0);
+
+    $this->service->send(new PhoneNumber('+44 01234567890'));
+})->throws(FailedSendingVerificationCodeException::class);
 
 it('throws an exception if the code has expired', function () {
     $this->fakeVerifyRequestWithExpiredCode();

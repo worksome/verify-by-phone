@@ -20,8 +20,8 @@ use Worksome\VerifyByPhone\Exceptions\VerificationCodeExpiredException;
  */
 final class TwilioVerificationService implements PhoneVerificationService
 {
-    private const ERROR_NUMBER_DOES_NOT_SUPPORT_SMS = 60205;
-    private const ERROR_NOT_FOUND = 20404;
+    public const ERROR_NUMBER_DOES_NOT_SUPPORT_SMS = 60205;
+    public const ERROR_NOT_FOUND = 20404;
 
     private VerificationList $verifications;
     private VerificationCheckList $verificationChecks;

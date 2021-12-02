@@ -5,6 +5,7 @@ namespace Worksome\VerifyByPhone\Tests\Concerns;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Http;
 use Propaganistas\LaravelPhone\PhoneNumber;
+use Twilio\Exceptions\TwilioException;
 
 trait FakesTwilioRequests
 {
@@ -53,6 +54,13 @@ trait FakesTwilioRequests
         }
 
         Http::fake(['https://verify.twilio.com/v2/Services/*/Verifications' => $body]);
+    }
+
+    public function fakeSendRequestWithError(int $error): void
+    {
+        Http::fake([
+            'https://verify.twilio.com/v2/Services/*/Verifications' => fn () => throw new TwilioException('Request failed', $error)
+        ]);
     }
 
     public function fakeVerifyRequest(string $number, bool $valid = true): void
