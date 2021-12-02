@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Worksome\VerifyByPhone\Services\Twilio;
 
 use GuzzleHttp\Psr7\Query;
@@ -10,6 +12,8 @@ use Twilio\Http\Response;
 /**
  * A Twilio HTTP client implementation that uses Laravel's Http Client
  * to allow for easy faking of responses in tests.
+ *
+ * @internal
  */
 final class TwilioHttpClient implements Client
 {

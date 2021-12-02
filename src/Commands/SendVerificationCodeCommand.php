@@ -1,11 +1,16 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Worksome\VerifyByPhone\Commands;
 
 use Illuminate\Console\Command;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
 
+/**
+ * @internal
+ */
 class SendVerificationCodeCommand extends Command
 {
     public $signature = 'verify-by-phone:send {number?}';

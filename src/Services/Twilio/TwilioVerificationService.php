@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Worksome\VerifyByPhone\Services\Twilio;
 
 use Propaganistas\LaravelPhone\PhoneNumber;
@@ -13,6 +15,9 @@ use Worksome\VerifyByPhone\Exceptions\UnknownVerificationErrorException;
 use Worksome\VerifyByPhone\Exceptions\UnsupportedNumberException;
 use Worksome\VerifyByPhone\Exceptions\VerificationCodeExpiredException;
 
+/**
+ * @internal
+ */
 final class TwilioVerificationService implements PhoneVerificationService
 {
     private const ERROR_NUMBER_DOES_NOT_SUPPORT_SMS = 60205;

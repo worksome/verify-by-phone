@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Worksome\VerifyByPhone\Exceptions;
 
 use Exception;

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Worksome\VerifyByPhone;
 
 use Illuminate\Foundation\Application;
@@ -11,6 +13,9 @@ use Worksome\VerifyByPhone\Commands\VerifyVerificationCodeCommand;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
 use Worksome\VerifyByPhone\Services\Twilio\TwilioHttpClient;
 
+/**
+ * @internal
+ */
 class VerifyByPhoneServiceProvider extends PackageServiceProvider
 {
     public function registeringPackage(): void

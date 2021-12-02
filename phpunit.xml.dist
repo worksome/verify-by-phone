@@ -18,6 +18,11 @@
     beStrictAboutOutputDuringTests="true"
     verbose="true"
 >
+    <coverage>
+        <include>
+            <directory>src</directory>
+        </include>
+    </coverage>
     <testsuites>
         <testsuite name="Worksome Test Suite">
             <directory>tests</directory>
