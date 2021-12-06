@@ -16,7 +16,7 @@ class VerifyByPhoneManager extends Manager
 {
     public function getDefaultDriver(): string
     {
-        return strval($this->config->get('verify-by-phone.driver', 'null'));
+        return strval($this->config->get('verify-by-phone.driver') ?? 'null');
     }
 
     public function createNullDriver(): FakeVerificationService
