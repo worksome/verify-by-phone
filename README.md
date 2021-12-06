@@ -57,7 +57,7 @@ this:
 ```php
 public function verifyCode(Request $request, PhoneVerificationService $verificationService)
 {
-    // Verify the verification code to the phone number
+    // Verify the verification code for the given phone number
     $valid = $verificationService->verify(
         new PhoneNumber($request->input('phone')), 
         $request->input('code')
