@@ -72,6 +72,20 @@ public function verifyCode(Request $request, PhoneVerificationService $verificat
 The first parameter is the phone number (again using `\Propaganistas\LaravelPhone\PhoneNumber`), and the second is the
 verification code provided by the user.
 
+## Artisan commands
+
+This package ships with a couple of artisan commands that allow you to send and verify verification codes.
+
+```bash
+# Send a verication code to the given phone number
+php artisan verify-by-phone:send "+44 01234567890"
+
+# Check that a given verication code is valid for the given phone number
+php artisan verify-by-phone:verify "+44 01234567890" 1234
+```
+
+The verify command will return a console failure if verification fails.
+
 ## Testing
 
 When writing tests, you likely do not want to make real requests to services such as Twilio. To support testing, we
