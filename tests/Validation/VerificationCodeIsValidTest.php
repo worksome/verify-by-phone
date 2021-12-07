@@ -33,3 +33,15 @@ it('can verify a validation code', function (mixed $phoneNumber, bool $passes) {
     ['+44 01234567890'],
     ['number'],
 ])->with([true, false]);
+
+it('returns the correct message if the code expired', function () {
+    $this->service->actAsThoughTheVerificationCodeExpired();
+
+    $validator = Validator::make(['code' => '1234'], [
+        'code' => [new VerificationCodeIsValid('+44 01234567890')]
+    ]);
+
+    expect($validator->errors()->get('code')[0])->toBe(
+        'The given verification code has expired. Please request a new one.'
+    );
+});

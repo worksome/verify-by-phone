@@ -5,9 +5,11 @@ declare(strict_types=1);
 namespace Worksome\VerifyByPhone\Services;
 
 use Closure;
+use Exception;
 use PHPUnit\Framework\Assert;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
+use Worksome\VerifyByPhone\Exceptions\VerificationCodeExpiredException;
 
 final class FakeVerificationService implements PhoneVerificationService
 {
@@ -63,6 +65,11 @@ final class FakeVerificationService implements PhoneVerificationService
         $this->verifyUsing = $result;
 
         return $this;
+    }
+
+    public function actAsThoughTheVerificationCodeExpired(): self
+    {
+        return $this->verifyUsing(fn () => throw new VerificationCodeExpiredException(new Exception('The given code has expired.')));
     }
 
     /**

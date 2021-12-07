@@ -7,7 +7,9 @@ namespace Worksome\VerifyByPhone\Validation\Rules;
 use Illuminate\Contracts\Validation\DataAwareRule;
 use Illuminate\Contracts\Validation\Rule;
 use Propaganistas\LaravelPhone\PhoneNumber;
+use Throwable;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
+use Worksome\VerifyByPhone\Exceptions\VerificationCodeExpiredException;
 
 final class VerificationCodeIsValid implements Rule, DataAwareRule
 {
@@ -16,14 +18,25 @@ final class VerificationCodeIsValid implements Rule, DataAwareRule
      */
     private array $data = [];
 
+    /**
+     * The exception that was thrown during verification, if any.
+     */
+    private ?Throwable $exception = null;
+
     public function __construct(private string|PhoneNumber $phoneNumber)
     {
     }
 
     public function passes($attribute, $value): bool
     {
-        // @phpstan-ignore-next-line
-        return app(PhoneVerificationService::class)->verify($this->getPhoneNumber(), strval($value));
+        try {
+            // @phpstan-ignore-next-line
+            return app(PhoneVerificationService::class)->verify($this->getPhoneNumber(), strval($value));
+        } catch (Throwable $exception) {
+            $this->exception = $exception;
+
+            return false;
+        }
     }
 
     private function getPhoneNumber(): PhoneNumber
@@ -41,6 +54,10 @@ final class VerificationCodeIsValid implements Rule, DataAwareRule
 
     public function message(): string
     {
+        if ($this->exception instanceof VerificationCodeExpiredException) {
+            return strval(__('The given verification code has expired. Please request a new one.'));
+        }
+
         return strval(__('The given verification code is invalid.'));
     }
 
