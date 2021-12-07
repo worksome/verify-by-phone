@@ -72,6 +72,37 @@ public function verifyCode(Request $request, PhoneVerificationService $verificat
 The first parameter is the phone number (again using `\Propaganistas\LaravelPhone\PhoneNumber`), and the second is the
 verification code provided by the user.
 
+## Validation rule
+
+We offer a rule to make it easy to verify a verification code during validation.
+
+> Be aware that this rule will call the `verify` method of the `PhoneVerificationService` contract, and likely will
+> make an HTTP request.
+
+```php
+Validator::validate($request->all(), [
+    'phone_number' => ['required'],
+    'verification_code' => ['required', Rule::verificationCodeIsValid('phone_number')],
+]);
+```
+
+If your data doesn't include the phone number, you may instead pass it in manually:
+
+```php
+Validator::validate($request->all(), [
+    'verification_code' => ['required', Rule::verificationCodeIsValid('+44 01234567890')],
+]);
+```
+
+We extend the `Rule` class for visual consistency with other rules, but you can also use the `VerificationCodeIsValid` rule directly for
+better IDE support:
+
+```php
+Validator::validate($request->all(), [
+    'verification_code' => ['required', new VerificationCodeIsValid('+44 01234567890')],
+]);
+```
+
 ## Artisan commands
 
 This package ships with a couple of artisan commands that allow you to send and verify verification codes.

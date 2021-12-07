@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Worksome\VerifyByPhone;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Validation\Rule;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 use Twilio\Rest\Client;
@@ -12,6 +13,7 @@ use Worksome\VerifyByPhone\Commands\SendVerificationCodeCommand;
 use Worksome\VerifyByPhone\Commands\VerifyVerificationCodeCommand;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
 use Worksome\VerifyByPhone\Services\Twilio\TwilioHttpClient;
+use Worksome\VerifyByPhone\Validation\Rules\VerificationCodeIsValid;
 
 /**
  * @internal
@@ -37,6 +39,10 @@ class VerifyByPhoneServiceProvider extends PackageServiceProvider
                 password: strval($app['config']->get('verify-by-phone.services.twilio.auth_token', '')),
                 httpClient: new TwilioHttpClient(),
             );
+        });
+
+        Rule::macro('verificationCodeIsValid', function (string $field) {
+            return new VerificationCodeIsValid($field);
         });
     }
 
