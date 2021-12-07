@@ -95,4 +95,9 @@ trait FakesTwilioRequests
 
         Http::fake(['https://verify.twilio.com/v2/Services/*/VerificationCheck' => Http::response($body, 404)]);
     }
+
+    public function fakeUpdateVerificationRequest(): void
+    {
+        Http::fake(['https://verify.twilio.com/v2/Services/*/Verifications/*' => Http::response([])]);
+    }
 }

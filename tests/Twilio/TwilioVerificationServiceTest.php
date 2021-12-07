@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Twilio\Rest\Client;
+use Worksome\VerifyByPhone\Contracts\InformsServiceAfterVerification;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
 use Worksome\VerifyByPhone\Contracts\VerificationCodeManager;
 use Worksome\VerifyByPhone\Events\PhoneNumberVerified;
@@ -89,6 +90,8 @@ it('returns false if the code is incorrect', function () {
 });
 
 it('will use a local verification code manager if generate_codes_locally is true', function () {
+    // We fake this event to ensure the twilio service isn't informed of the update
+    Event::fake(PhoneNumberVerified::class);
     $this->fakeSendRequest('+44 01234567890');
 
     config()->set('verify-by-phone.driver', 'twilio');
@@ -137,3 +140,49 @@ it('fires an event when a verification code is verified', function (string $phon
 })->with([
     ['+44 01234567890', '1234'],
 ])->with([true, false]);
+
+it('implements the InformsServiceAfterVerification contract', function () {
+    expect($this->service)->toBeInstanceOf(InformsServiceAfterVerification::class);
+});
+
+it('can inform Twilio that a verification code has been verified', function () {
+    $this->fakeUpdateVerificationRequest();
+
+    config()->set('verify-by-phone.driver', 'twilio');
+    config()->set('verify-by-phone.services.twilio.generate_codes_locally', true);
+
+    $phoneNumber = new PhoneNumber('+44 01234567890');
+    $service = $this->app->make(PhoneVerificationService::class);
+
+    $service->informService($phoneNumber, true);
+
+    Http::assertSentCount(1);
+});
+
+it('will not inform twilio if not using local codes', function () {
+    Http::fake();
+
+    config()->set('verify-by-phone.driver', 'twilio');
+    config()->set('verify-by-phone.services.twilio.generate_codes_locally', false);
+
+    $phoneNumber = new PhoneNumber('+44 01234567890');
+    $service = $this->app->make(PhoneVerificationService::class);
+
+    $service->informService($phoneNumber, true);
+
+    Http::assertSentCount(0);
+});
+
+it('will not inform twilio if the verification result is false', function () {
+    Http::fake();
+
+    config()->set('verify-by-phone.driver', 'twilio');
+    config()->set('verify-by-phone.services.twilio.generate_codes_locally', true);
+
+    $phoneNumber = new PhoneNumber('+44 01234567890');
+    $service = $this->app->make(PhoneVerificationService::class);
+
+    $service->informService($phoneNumber, false);
+
+    Http::assertSentCount(0);
+});

@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Worksome\VerifyByPhone;
 
 use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Validation\Rule;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -14,6 +15,8 @@ use Worksome\VerifyByPhone\Commands\VerifyVerificationCodeCommand;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
 use Worksome\VerifyByPhone\Contracts\VerificationCodeGenerator;
 use Worksome\VerifyByPhone\Contracts\VerificationCodeManager;
+use Worksome\VerifyByPhone\Events\PhoneNumberVerified;
+use Worksome\VerifyByPhone\Listeners\InformServiceOfVerificationStatus;
 use Worksome\VerifyByPhone\Services\Twilio\TwilioHttpClient;
 use Worksome\VerifyByPhone\Validation\Rules\VerificationCodeIsValid;
 use Worksome\VerifyByPhone\VerificationCodeGenerators\NumericVerificationCodeGenerator;
@@ -48,9 +51,9 @@ class VerifyByPhoneServiceProvider extends PackageServiceProvider
             );
         });
 
-        Rule::macro('verificationCodeIsValid', function (string $field) {
-            return new VerificationCodeIsValid($field);
-        });
+        Rule::macro('verificationCodeIsValid', fn (string $field) => new VerificationCodeIsValid($field));
+
+        Event::listen(PhoneNumberVerified::class, InformServiceOfVerificationStatus::class);
     }
 
     public function configurePackage(Package $package): void
