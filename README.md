@@ -149,7 +149,7 @@ it('tests something to do with SMS verification', function () {
     $service->actAsThoughTheVerificationCodeExpired();
     
     // Assert that a verification was "sent" on the given number
-    $service->assertSentVerification(new PhonNumber('+441174960123'));
+    $service->assertSentVerification(new PhoneNumber('+441174960123'));
 });
 ```
 
