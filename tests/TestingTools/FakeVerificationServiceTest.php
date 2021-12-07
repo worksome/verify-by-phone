@@ -1,6 +1,7 @@
 <?php
 
 use Propaganistas\LaravelPhone\PhoneNumber;
+use Worksome\VerifyByPhone\Exceptions\VerificationCodeExpiredException;
 use Worksome\VerifyByPhone\Services\FakeVerificationService;
 
 beforeEach(function () {
@@ -18,3 +19,9 @@ it('can declare an action to perform when verifying', function () {
 
     $this->service->verify(new PhoneNumber('+44 01234567890'), '1234');
 })->throws('It worked!');
+
+it('can pretend that the verification code expired', function () {
+    $this->service->actAsThoughTheVerificationCodeExpired();
+
+    $this->service->verify(new PhoneNumber('+44 01234567890'), '1234');
+})->throws(VerificationCodeExpiredException::class);

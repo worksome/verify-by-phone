@@ -103,6 +103,8 @@ Validator::validate($request->all(), [
 ]);
 ```
 
+This rule will also handle the case where the verification code has expired and return a suitable error message.
+
 ## Artisan commands
 
 This package ships with a couple of artisan commands that allow you to send and verify verification codes.
@@ -142,6 +144,9 @@ it('tests something to do with SMS verification', function () {
     
     // Customise what happens when calling `verify`
     $service->verifyUsing(fn () => throw new Exception('Something went wrong'));
+    
+    // Throw a VerificationCodeExpiredException
+    $service->actAsThoughTheVerificationCodeExpired();
     
     // Assert that a verification was "sent" on the given number
     $service->assertSentVerification(new PhonNumber('+44 01234567890'));
