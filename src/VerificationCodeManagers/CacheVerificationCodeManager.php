@@ -20,7 +20,7 @@ final class CacheVerificationCodeManager implements VerificationCodeManager
     public function store(PhoneNumber $phoneNumber): string
     {
         $code = $this->codeGenerator->generate($phoneNumber);
-        $this->cache->put($this->getCacheKey($phoneNumber), $code, 60 * 5);
+        $this->cache->put($this->getCacheKey($phoneNumber), $code, 60 * 10);
 
         return $code;
     }

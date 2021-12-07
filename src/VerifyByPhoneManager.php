@@ -32,7 +32,7 @@ class VerifyByPhoneManager extends Manager
         /** @var VerificationCodeManager $verificationCodeManager */
         $verificationCodeManager = $this->container->make(VerificationCodeManager::class);
 
-        $generateCodeLocally = boolval($this->config->get('verify-by-phone.services.twilio.generate_code_locally'));
+        $generateCodeLocally = boolval($this->config->get('verify-by-phone.services.twilio.generate_codes_locally', false));
 
         return new TwilioVerificationService(
             $client,

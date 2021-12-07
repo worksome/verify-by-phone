@@ -19,15 +19,17 @@ it('can store and retrieve the verification code', function () {
     expect($retrievedCode)->toBe($generatedCode);
 });
 
-it('expires after 5 minutes', function () {
+it('expires after 10 minutes', function () {
     $manager = new CacheVerificationCodeManager(
         $this->app->make('cache.store'),
         new NumericVerificationCodeGenerator(),
     );
 
     $manager->store(new PhoneNumber('+44 01234567890'));
-    $this->travel(60 * 5 + 1)->seconds();
-    $code = $manager->retrieve(new PhoneNumber('+44 01234567890'));
 
-    expect($code)->toBeNull();
+    $this->travel(60 * 10)->seconds();
+    expect($manager->retrieve(new PhoneNumber('+44 01234567890')))->not->toBeNull();
+
+    $this->travel(1)->seconds();
+    expect($manager->retrieve(new PhoneNumber('+44 01234567890')))->toBeNull();
 });

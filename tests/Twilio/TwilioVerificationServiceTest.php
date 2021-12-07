@@ -85,11 +85,11 @@ it('returns false if the code is incorrect', function () {
     expect($result)->toBeFalse();
 });
 
-it('will use a local verification code manager if generate_code_locally is true', function () {
+it('will use a local verification code manager if generate_codes_locally is true', function () {
     $this->fakeSendRequest('+44 01234567890');
 
     config()->set('verify-by-phone.driver', 'twilio');
-    config()->set('verify-by-phone.services.twilio.generate_code_locally', true);
+    config()->set('verify-by-phone.services.twilio.generate_codes_locally', true);
 
     $phoneNumber = new PhoneNumber('+44 01234567890');
     $this->partialMock(VerificationCodeManager::class)
@@ -103,3 +103,16 @@ it('will use a local verification code manager if generate_code_locally is true'
 
     Http::assertNotSent(fn (Request $request) => Str::contains($request->url(), 'VerificationCheck'));
 });
+
+it('will throw an expired exception if generate_codes_locally is true and a local verification code is missing', function () {
+    config()->set('verify-by-phone.driver', 'twilio');
+    config()->set('verify-by-phone.services.twilio.generate_codes_locally', true);
+
+    $phoneNumber = new PhoneNumber('+44 01234567890');
+    $this->partialMock(VerificationCodeManager::class)
+        ->shouldReceive('retrieve')->with($phoneNumber)->once()->andReturn(null);
+
+    $service = $this->app->make(PhoneVerificationService::class);
+
+    $service->verify($phoneNumber, '123456');
+})->throws(VerificationCodeExpiredException::class);

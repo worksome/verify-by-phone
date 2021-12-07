@@ -33,6 +33,13 @@ under `driver`, or by using the dedicated `.env` variable: `VERIFY_BY_PHONE_DRIV
 To use our Twilio integration, you'll need to provide an `account_sid`, `auth_token` and `verify_sid`. All of these can
 be set in the `config/verify-by-phone.php` file under `services.twilio`.
 
+By default, the Twilio integration will delegate the creation, storage and verification of codes to the Twilio platform.
+However, we also provide support for creating, storing and verifying codes locally. This speeds up the process of verification
+for your end users. To enable support for this, set the `services.twilio.generate_codes_locally` config variable to `true` in the `config/verify-by-phone.php` file.
+Local verification codes will expire after 10 minutes.
+
+> Note that your verification codes will be stored using your configured Laravel cache driver.
+
 ## Usage
 
 To use this package, you'll want to inject the `\Worksome\VerifyByPhone\Contracts\PhoneVerificationService`
