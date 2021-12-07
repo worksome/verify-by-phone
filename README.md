@@ -90,7 +90,7 @@ If your data doesn't include the phone number, you may instead pass it in manual
 
 ```php
 Validator::validate($request->all(), [
-    'verification_code' => ['required', Rule::verificationCodeIsValid('+44 01234567890')],
+    'verification_code' => ['required', Rule::verificationCodeIsValid('+441174960123')],
 ]);
 ```
 
@@ -99,7 +99,7 @@ better IDE support:
 
 ```php
 Validator::validate($request->all(), [
-    'verification_code' => ['required', new VerificationCodeIsValid('+44 01234567890')],
+    'verification_code' => ['required', new VerificationCodeIsValid('+441174960123')],
 ]);
 ```
 
@@ -111,10 +111,10 @@ This package ships with a couple of artisan commands that allow you to send and 
 
 ```bash
 # Send a verication code to the given phone number
-php artisan verify-by-phone:send "+44 01234567890"
+php artisan verify-by-phone:send "+441174960123"
 
 # Check that a given verication code is valid for the given phone number
-php artisan verify-by-phone:verify "+44 01234567890" 1234
+php artisan verify-by-phone:verify "+441174960123" 1234
 ```
 
 The verify command will return a console failure if verification fails.
@@ -149,7 +149,7 @@ it('tests something to do with SMS verification', function () {
     $service->actAsThoughTheVerificationCodeExpired();
     
     // Assert that a verification was "sent" on the given number
-    $service->assertSentVerification(new PhonNumber('+44 01234567890'));
+    $service->assertSentVerification(new PhoneNumber('+441174960123'));
 });
 ```
 
