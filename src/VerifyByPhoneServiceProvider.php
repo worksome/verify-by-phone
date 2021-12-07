@@ -12,8 +12,10 @@ use Twilio\Rest\Client;
 use Worksome\VerifyByPhone\Commands\SendVerificationCodeCommand;
 use Worksome\VerifyByPhone\Commands\VerifyVerificationCodeCommand;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
+use Worksome\VerifyByPhone\Contracts\VerificationCodeGenerator;
 use Worksome\VerifyByPhone\Services\Twilio\TwilioHttpClient;
 use Worksome\VerifyByPhone\Validation\Rules\VerificationCodeIsValid;
+use Worksome\VerifyByPhone\VerificationCodeGenerators\NumericVerificationCodeGenerator;
 
 /**
  * @internal
@@ -28,6 +30,8 @@ class VerifyByPhoneServiceProvider extends PackageServiceProvider
 
             return $manager->driver();
         });
+
+        $this->app->singleton(VerificationCodeGenerator::class, NumericVerificationCodeGenerator::class);
     }
 
     public function bootingPackage(): void
