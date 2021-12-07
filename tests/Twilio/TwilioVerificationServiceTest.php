@@ -6,6 +6,7 @@ use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Twilio\Rest\Client;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
+use Worksome\VerifyByPhone\Contracts\VerificationCodeManager;
 use Worksome\VerifyByPhone\Exceptions\FailedSendingVerificationCodeException;
 use Worksome\VerifyByPhone\Exceptions\UnsupportedNumberException;
 use Worksome\VerifyByPhone\Exceptions\VerificationCodeExpiredException;
@@ -17,7 +18,8 @@ uses(FakesTwilioRequests::class);
 beforeEach(function () {
     $this->service = new TwilioVerificationService(
         $this->app->make(Client::class),
-        'aniofandioancdioscnaopdjnaocaejopiof'
+        'aniofandioancdioscnaopdjnaocaejopiof',
+        null,
     );
 });
 
@@ -81,4 +83,23 @@ it('returns false if the code is incorrect', function () {
     $result = $this->service->verify(new PhoneNumber('+44 01234567890'), '1234');
 
     expect($result)->toBeFalse();
+});
+
+it('will use a local verification code manager if generate_code_locally is true', function () {
+    $this->fakeSendRequest('+44 01234567890');
+
+    config()->set('verify-by-phone.driver', 'twilio');
+    config()->set('verify-by-phone.services.twilio.generate_code_locally', true);
+
+    $phoneNumber = new PhoneNumber('+44 01234567890');
+    $this->partialMock(VerificationCodeManager::class)
+        ->shouldReceive('store')->with($phoneNumber)->once()->andReturn('123456')
+        ->shouldReceive('retrieve')->with($phoneNumber)->once()->andReturn('123456');
+
+    $service = $this->app->make(PhoneVerificationService::class);
+
+    $service->send($phoneNumber);
+    $service->verify($phoneNumber, '123456');
+
+    Http::assertNotSent(fn (Request $request) => Str::contains($request->url(), 'VerificationCheck'));
 });

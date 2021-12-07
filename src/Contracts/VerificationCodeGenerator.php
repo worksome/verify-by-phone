@@ -8,10 +8,8 @@ use Propaganistas\LaravelPhone\PhoneNumber;
 
 interface VerificationCodeGenerator
 {
-
     /**
      * Generate a verification code that will be sent to the user.
      */
     public function generate(PhoneNumber $phoneNumber): string;
-
 }

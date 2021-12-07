@@ -6,6 +6,7 @@ namespace Worksome\VerifyByPhone;
 
 use Illuminate\Support\Manager;
 use Twilio\Rest\Client;
+use Worksome\VerifyByPhone\Contracts\VerificationCodeManager;
 use Worksome\VerifyByPhone\Services\FakeVerificationService;
 use Worksome\VerifyByPhone\Services\Twilio\TwilioVerificationService;
 
@@ -28,10 +29,15 @@ class VerifyByPhoneManager extends Manager
     {
         /** @var Client $client */
         $client = $this->container->make(Client::class);
+        /** @var VerificationCodeManager $verificationCodeManager */
+        $verificationCodeManager = $this->container->make(VerificationCodeManager::class);
+
+        $generateCodeLocally = boolval($this->config->get('verify-by-phone.services.twilio.generate_code_locally'));
 
         return new TwilioVerificationService(
             $client,
             strval($this->config->get('verify-by-phone.services.twilio.verify_sid')),
+            $generateCodeLocally ? $verificationCodeManager : null
         );
     }
 }
