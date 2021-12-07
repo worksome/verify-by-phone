@@ -40,6 +40,9 @@ Local verification codes will expire after 10 minutes.
 
 > Note that your verification codes will be stored using your configured Laravel cache driver.
 
+Of course, when using locally generated codes, we still need to update Twilio with the status of the verification. To support this, we will automatically dispatch a queued listener
+to update Twilio after a verification is completed.
+
 ## Usage
 
 To use this package, you'll want to inject the `\Worksome\VerifyByPhone\Contracts\PhoneVerificationService`

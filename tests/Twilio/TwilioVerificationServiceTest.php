@@ -1,12 +1,14 @@
 <?php
 
 use Illuminate\Http\Client\Request;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Twilio\Rest\Client;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
 use Worksome\VerifyByPhone\Contracts\VerificationCodeManager;
+use Worksome\VerifyByPhone\Events\PhoneNumberVerified;
 use Worksome\VerifyByPhone\Exceptions\FailedSendingVerificationCodeException;
 use Worksome\VerifyByPhone\Exceptions\UnsupportedNumberException;
 use Worksome\VerifyByPhone\Exceptions\VerificationCodeExpiredException;
@@ -19,6 +21,7 @@ beforeEach(function () {
     $this->service = new TwilioVerificationService(
         $this->app->make(Client::class),
         'aniofandioancdioscnaopdjnaocaejopiof',
+        null,
         null,
     );
 });
@@ -116,3 +119,21 @@ it('will throw an expired exception if generate_codes_locally is true and a loca
 
     $service->verify($phoneNumber, '123456');
 })->throws(VerificationCodeExpiredException::class);
+
+it('fires an event when a verification code is verified', function (string $phoneNumber, string $code, bool $isVerified) {
+    config()->set('verify-by-phone.driver', 'twilio');
+
+    Event::fake(PhoneNumberVerified::class);
+    $this->fakeVerifyRequest($phoneNumber, $isVerified);
+
+    $service = $this->app->make(PhoneVerificationService::class);
+    $service->verify(new PhoneNumber($phoneNumber), $code);
+
+    Event::assertDispatched(PhoneNumberVerified::class, function (PhoneNumberVerified $event) use ($phoneNumber, $code, $isVerified) {
+        return $event->phoneNumber->getRawNumber() === $phoneNumber
+            && $event->code === $code
+            && $event->isVerified === $isVerified;
+    });
+})->with([
+    ['+44 01234567890', '1234'],
+])->with([true, false]);

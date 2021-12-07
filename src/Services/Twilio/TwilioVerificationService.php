@@ -5,14 +5,16 @@ declare(strict_types=1);
 namespace Worksome\VerifyByPhone\Services\Twilio;
 
 use Exception;
+use Illuminate\Contracts\Events\Dispatcher;
 use Propaganistas\LaravelPhone\PhoneNumber;
 use Throwable;
 use Twilio\Exceptions\TwilioException;
 use Twilio\Rest\Client;
-use Twilio\Rest\Verify\V2\Service\VerificationCheckList;
-use Twilio\Rest\Verify\V2\Service\VerificationList;
+use Twilio\Rest\Verify\V2\ServiceContext;
+use Worksome\VerifyByPhone\Contracts\InformsServiceAfterVerification;
 use Worksome\VerifyByPhone\Contracts\PhoneVerificationService;
 use Worksome\VerifyByPhone\Contracts\VerificationCodeManager;
+use Worksome\VerifyByPhone\Events\PhoneNumberVerified;
 use Worksome\VerifyByPhone\Exceptions\FailedSendingVerificationCodeException;
 use Worksome\VerifyByPhone\Exceptions\UnknownVerificationErrorException;
 use Worksome\VerifyByPhone\Exceptions\UnsupportedNumberException;
@@ -21,28 +23,26 @@ use Worksome\VerifyByPhone\Exceptions\VerificationCodeExpiredException;
 /**
  * @internal
  */
-final class TwilioVerificationService implements PhoneVerificationService
+final class TwilioVerificationService implements PhoneVerificationService, InformsServiceAfterVerification
 {
     public const ERROR_NUMBER_DOES_NOT_SUPPORT_SMS = 60205;
     public const ERROR_NOT_FOUND = 20404;
 
-    private VerificationList $verifications;
-    private VerificationCheckList $verificationChecks;
+    private ServiceContext $twilio;
 
     public function __construct(
         Client $twilio,
         string $verifyId,
         private ?VerificationCodeManager $verificationCodeManager,
+        private ?Dispatcher $event,
     ) {
-        $twilio = $twilio->verify->v2->services($verifyId);
-        $this->verifications = $twilio->verifications;
-        $this->verificationChecks = $twilio->verificationChecks;
+        $this->twilio = $twilio->verify->v2->services($verifyId);
     }
 
     public function send(PhoneNumber $number): void
     {
         try {
-            $this->verifications->create($number->formatE164(), 'sms', $this->getSendOptions($number));
+            $this->twilio->verifications->create($number->formatE164(), 'sms', $this->getSendOptions($number));
         } catch (TwilioException $e) {
             throw match ($e->getCode()) {
                 self::ERROR_NUMBER_DOES_NOT_SUPPORT_SMS => UnsupportedNumberException::fromException($e),
@@ -68,7 +68,10 @@ final class TwilioVerificationService implements PhoneVerificationService
     public function verify(PhoneNumber $number, string $code): bool
     {
         try {
-            return $this->codeIsValid($number, $code);
+            $isVerified = $this->codeIsValid($number, $code);
+            $this->event?->dispatch(new PhoneNumberVerified($number, $code, $isVerified));
+
+            return $isVerified;
         } catch (Throwable $e) {
             throw match ($e->getCode()) {
                 self::ERROR_NOT_FOUND => VerificationCodeExpiredException::fromException($e),
@@ -84,7 +87,7 @@ final class TwilioVerificationService implements PhoneVerificationService
     private function codeIsValid(PhoneNumber $number, string $code): bool
     {
         if (! $this->isUsingLocallyGeneratedCodes()) {
-            return $this->verificationChecks->create($code, ['to' => $number->formatE164()])->status === 'approved';
+            return $this->twilio->verificationChecks->create($code, ['to' => $number->formatE164()])->status === 'approved';
         }
 
         $storedCode = $this->verificationCodeManager?->retrieve($number);
@@ -97,5 +100,18 @@ final class TwilioVerificationService implements PhoneVerificationService
     private function isUsingLocallyGeneratedCodes(): bool
     {
         return $this->verificationCodeManager !== null;
+    }
+
+    public function informService(PhoneNumber $phoneNumber, bool $isVerified): void
+    {
+        if (! $this->isUsingLocallyGeneratedCodes()) {
+            return;
+        }
+
+        if (! $isVerified) {
+            return;
+        }
+
+        $this->twilio->verifications($phoneNumber->formatE164())->update('approved');
     }
 }
