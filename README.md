@@ -76,6 +76,9 @@ verification code provided by the user.
 
 We offer a rule to make it easy to verify a verification code during validation.
 
+> Be aware that this rule will call the `verify` method of the `PhoneVerificationService` contract, and likely will
+> make an HTTP request.
+
 ```php
 Validator::validate($request->all(), [
     'phone_number' => ['required'],
