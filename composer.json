@@ -17,20 +17,20 @@
     ],
     "require": {
         "php": "^8.0|^8.1",
-        "illuminate/contracts": "^8.73",
+        "illuminate/contracts": "^8.73|^9.0",
         "propaganistas/laravel-phone": "^4.3",
         "spatie/laravel-package-tools": "^1.9.2",
         "twilio/sdk": "^6.31"
     },
     "require-dev": {
         "guzzlehttp/guzzle": "^7.4",
-        "nunomaduro/collision": "^5.10",
-        "orchestra/testbench": "^6.22",
+        "nunomaduro/collision": "^5.10|^6.0",
+        "orchestra/testbench": "^6.22|^7.0",
         "pestphp/pest": "^1.21",
         "pestphp/pest-plugin-laravel": "^1.1",
         "pestphp/pest-plugin-parallel": "^1.0",
         "spatie/laravel-ray": "^1.26",
-        "worksome/coding-style": "0.6.2"
+        "worksome/coding-style": "0.17.0"
     },
     "autoload": {
         "psr-4": {
@@ -56,7 +56,12 @@
         ]
     },
     "config": {
-        "sort-packages": true
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
+            "worksome/coding-style": true
+        }
     },
     "extra": {
         "laravel": {
