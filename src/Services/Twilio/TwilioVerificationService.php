@@ -48,12 +48,10 @@ final class TwilioVerificationService implements PhoneVerificationService
     public function verify(PhoneNumber $number, string $code): bool
     {
         try {
-            $response = $this->verificationChecks->create(
-                [
-                    'code' => $code,
-                    'to' => $number->formatE164(),
-                ]
-            );
+            $response = $this->verificationChecks->create([
+                'code' => $code,
+                'to' => $number->formatE164(),
+            ]);
         } catch (TwilioException $e) {
             throw match ($e->getCode()) {
                 self::ERROR_NOT_FOUND => VerificationCodeExpiredException::fromException($e),
