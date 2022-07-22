@@ -49,8 +49,10 @@ final class TwilioVerificationService implements PhoneVerificationService
     {
         try {
             $response = $this->verificationChecks->create(
-                $code,
-                ['to' => $number->formatE164()]
+                [
+                    'code' => $code,
+                    'to' => $number->formatE164(),
+                ]
             );
         } catch (TwilioException $e) {
             throw match ($e->getCode()) {
