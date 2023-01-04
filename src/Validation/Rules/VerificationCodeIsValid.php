@@ -45,7 +45,7 @@ final class VerificationCodeIsValid implements Rule, DataAwareRule
             return $this->phoneNumber;
         }
 
-        if (!array_key_exists($this->phoneNumber, $this->data)) {
+        if (! array_key_exists($this->phoneNumber, $this->data)) {
             return new PhoneNumber($this->phoneNumber);
         }
 

@@ -69,7 +69,9 @@ final class FakeVerificationService implements PhoneVerificationService
 
     public function actAsThoughTheVerificationCodeExpired(): self
     {
-        return $this->verifyUsing(fn () => throw new VerificationCodeExpiredException(new Exception('The given code has expired.')));
+        return $this->verifyUsing(
+            fn () => throw new VerificationCodeExpiredException(new Exception('The given code has expired.'))
+        );
     }
 
     /**
