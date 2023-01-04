@@ -59,7 +59,10 @@ trait FakesTwilioRequests
     public function fakeSendRequestWithError(int $error): void
     {
         Http::fake([
-            'https://verify.twilio.com/v2/Services/*/Verifications' => fn () => throw new TwilioException('Request failed', $error)
+            'https://verify.twilio.com/v2/Services/*/Verifications' => fn () => throw new TwilioException(
+                'Request failed',
+                $error
+            )
         ]);
     }
 
