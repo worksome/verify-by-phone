@@ -1,6 +1,11 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$number of class Propaganistas\\\\LaravelPhone\\\\PhoneNumber constructor expects string, mixed given\\.$#"
+			message: "#^Illuminate\\\\Support\\\\Facades\\\\Http facade should not be used\\.$#"
+			count: 1
+			path: src/Services/Twilio/TwilioHttpClient.php
+
+		-
+			message: "#^Parameter \\#1 \\$number of class Propaganistas\\\\LaravelPhone\\\\PhoneNumber constructor expects string\\|null, mixed given\\.$#"
 			count: 1
 			path: src/Validation/Rules/VerificationCodeIsValid.php
