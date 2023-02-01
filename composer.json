@@ -18,12 +18,12 @@
     "require": {
         "php": "^8.2",
         "illuminate/contracts": "^9.46",
-        "propaganistas/laravel-phone": "^4.3",
+        "propaganistas/laravel-phone": "^5.0",
         "spatie/laravel-package-tools": "^1.13",
         "twilio/sdk": "^6.44"
     },
     "require-dev": {
-        "guzzlehttp/guzzle": "^7.4",
+        "guzzlehttp/guzzle": "^7.5",
         "nunomaduro/collision": "^6.3",
         "orchestra/testbench": "^7.18",
         "pestphp/pest": "^1.22.3",
