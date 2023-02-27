@@ -2,6 +2,8 @@
 
 All notable changes to `verify-by-phone` will be documented in this file.
 
-## 1.0.0 - 202X-XX-XX
+## v0.5.0 - 2023-02-27
 
-- initial release
+### Added
+
+- Support for Laravel 10 in [#25](https://github.com/worksome/verify-by-phone/pull/25)
