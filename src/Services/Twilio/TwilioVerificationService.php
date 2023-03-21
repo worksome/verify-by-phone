@@ -33,10 +33,10 @@ final class TwilioVerificationService implements PhoneVerificationService
         $this->verificationChecks = $twilio->verificationChecks;
     }
 
-    public function send(PhoneNumber $number): void
+    public function send(PhoneNumber $number, string $channel = 'sms'): void
     {
         try {
-            $this->verifications->create($number->formatE164(), 'sms');
+            $this->verifications->create($number->formatE164(), $channel);
         } catch (TwilioException $e) {
             throw match ($e->getCode()) {
                 self::ERROR_NUMBER_DOES_NOT_SUPPORT_SMS => UnsupportedNumberException::fromException($e),
