@@ -4,18 +4,19 @@
     xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
     bootstrap="vendor/autoload.php"
     colors="true"
+    cacheDirectory=".phpunit.cache"
 >
-    <coverage>
+    <testsuites>
+        <testsuite name="Worksome Test Suite">
+            <directory>tests</directory>
+        </testsuite>
+    </testsuites>
+    <source>
         <include>
             <directory>src</directory>
         </include>
         <exclude>
             <directory>src/Exceptions</directory>
         </exclude>
-    </coverage>
-    <testsuites>
-        <testsuite name="Worksome Test Suite">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
+    </source>
 </phpunit>
