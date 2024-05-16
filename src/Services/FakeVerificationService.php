@@ -28,12 +28,12 @@ final class FakeVerificationService implements PhoneVerificationService
      */
     private bool|Closure $verifyUsing = true;
 
-    public function send(PhoneNumber $number): void
+    public function send(PhoneNumber $number, string $channel = 'sms'): void
     {
         $this->verifications[] = $number->formatE164();
 
         if ($this->sendUsing) {
-            $this->sendUsing->__invoke($number);
+            $this->sendUsing->__invoke($number, $channel);
         }
     }
 
