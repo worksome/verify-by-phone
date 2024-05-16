@@ -35,7 +35,7 @@ final class TwilioVerificationService implements PhoneVerificationService
         $this->verificationChecks = $twilio->verificationChecks;
     }
 
-    public function send(PhoneNumber $number), string $channel = 'sms'): void
+    public function send(PhoneNumber $number, string $channel = 'sms'): void
     {
         try {
             $this->verifications->create($number->formatE164(), $channel);
