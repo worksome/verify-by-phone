@@ -20,7 +20,7 @@
         "illuminate/contracts": "^11.0 || ^12.0",
         "propaganistas/laravel-phone": "^5.3.4",
         "spatie/laravel-package-tools": "^1.19",
-        "twilio/sdk": "^6.44 || ^7.0"
+        "twilio/sdk": "^6.44 || ^7.0 || ^8.0"
     },
     "require-dev": {
         "guzzlehttp/guzzle": "^7.8",
