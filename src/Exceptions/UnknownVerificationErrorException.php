@@ -11,7 +11,7 @@ final class UnknownVerificationErrorException extends Exception
 {
     public function __construct(Throwable $previous)
     {
-        parent::__construct("Something went wrong while verifying sms code.", 0, $previous);
+        parent::__construct('Something went wrong while verifying sms code.', 0, $previous);
     }
 
     public static function fromException(Exception $exception): self

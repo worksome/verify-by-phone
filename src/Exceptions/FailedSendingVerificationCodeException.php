@@ -11,7 +11,7 @@ final class FailedSendingVerificationCodeException extends Exception
 {
     public function __construct(Throwable $previous)
     {
-        parent::__construct("Failed sending verification code", 0, $previous);
+        parent::__construct('Failed sending verification code', 0, $previous);
     }
 
     public static function fromException(Exception $exception): self

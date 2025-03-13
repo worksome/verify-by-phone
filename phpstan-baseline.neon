@@ -1,31 +1,46 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			identifier: argument.type
 			count: 1
 			path: src/Commands/SendVerificationCodeCommand.php
 
 		-
-			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			identifier: argument.type
 			count: 2
 			path: src/Commands/VerifyVerificationCodeCommand.php
 
 		-
-			message: "#^Illuminate\\\\Support\\\\Facades\\\\Http facade should not be used\\.$#"
+			message: '#^Illuminate\\Support\\Facades\\Http facade should not be used\.$#'
+			identifier: larastanStrictRules.noFacadeRule
 			count: 1
 			path: src/Services/Twilio/TwilioHttpClient.php
 
 		-
-			message: "#^Parameter \\#1 \\$number of class Propaganistas\\\\LaravelPhone\\\\PhoneNumber constructor expects string\\|null, mixed given\\.$#"
+			message: '''
+				#^Class Worksome\\VerifyByPhone\\Validation\\Rules\\VerificationCodeIsValid implements deprecated interface Illuminate\\Contracts\\Validation\\Rule\:
+				see ValidationRule$#
+			'''
+			identifier: class.implementsDeprecatedInterface
 			count: 1
 			path: src/Validation/Rules/VerificationCodeIsValid.php
 
 		-
-			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
+			message: '#^Parameter \#1 \$number of class Propaganistas\\LaravelPhone\\PhoneNumber constructor expects string\|null, mixed given\.$#'
+			identifier: argument.type
+			count: 1
+			path: src/Validation/Rules/VerificationCodeIsValid.php
+
+		-
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			identifier: argument.type
 			count: 2
 			path: src/VerifyByPhoneManager.php
 
 		-
-			message: "#^Parameter \\#1 \\$value of function strval expects bool\\|float\\|int\\|resource\\|string\\|null, mixed given\\.$#"
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			identifier: argument.type
 			count: 2
 			path: src/VerifyByPhoneServiceProvider.php
