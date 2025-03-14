@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Client\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Str;
@@ -48,6 +49,24 @@ it('can send a Twilio verification SMS', function () {
             && $url->endsWith('/Verifications');
     });
 });
+
+it('can use a custom channel', function (string $channel) {
+    $this->fakeSendRequest('+44 01234567890', channel: $channel);
+
+    $this->app->make(Repository::class)->set('verify-by-phone.services.twilio.channel', $channel);
+
+    $this->service->send(new PhoneNumber('+44 01234567890'));
+
+    Http::assertSent(function (Request $request) use ($channel) {
+        $url = Str::of($request->url());
+
+        return $url->startsWith('https://verify.twilio.com/v2/Services/')
+            && $url->endsWith('/Verifications')
+            && $request->data()['Channel'] === $channel;
+    });
+})->with([
+    'whatsapp',
+]);
 
 it('throws an UnsupportedNumberException if the number is unsupported', function () {
     $this->fakeSendRequestWithError(TwilioVerificationService::ERROR_NUMBER_DOES_NOT_SUPPORT_SMS);

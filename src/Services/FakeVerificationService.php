@@ -19,7 +19,7 @@ final class FakeVerificationService implements PhoneVerificationService
     private array $verifications = [];
 
     /**
-     * @var null|Closure(PhoneNumber, string): void
+     * @var null|Closure(PhoneNumber): void
      */
     private Closure|null $sendUsing = null;
 
@@ -32,7 +32,7 @@ final class FakeVerificationService implements PhoneVerificationService
     {
         $this->verifications[] = $number->formatE164();
 
-        if ($this->sendUsing) {
+        if ($this->sendUsing instanceof Closure) {
             $this->sendUsing->__invoke($number);
         }
     }

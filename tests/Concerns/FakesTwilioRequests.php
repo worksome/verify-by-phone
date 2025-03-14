@@ -9,7 +9,7 @@ use Twilio\Exceptions\TwilioException;
 
 trait FakesTwilioRequests
 {
-    public function fakeSendRequest(string $number, array $response = []): void
+    public function fakeSendRequest(string $number, array $response = [], string $channel = 'sms'): void
     {
         $number = new PhoneNumber($number);
 
@@ -46,7 +46,7 @@ trait FakesTwilioRequests
             'sid' => 'oapmfopadmaifbnaopxnaionadopnaiocnwdaop',
             'date_created' => '2021-12-02T13:15:48Z',
             'service_sid' => 'afoiandopanaopcnawopanmcopamopacoapdn',
-            'channel' => 'sms',
+            'channel' => $channel,
         ];
 
         foreach ($response as $key => $value) {
