@@ -1,7 +1,7 @@
 # Verify your users by call or SMS
 
-[![PHPStan](https://github.com/worksome/verify-by-phone/actions/workflows/phpstan.yml/badge.svg)](https://github.com/worksome/verify-by-phone/actions/workflows/phpstan.yml)
-[![run-tests](https://github.com/worksome/verify-by-phone/actions/workflows/run-tests.yml/badge.svg)](https://github.com/worksome/verify-by-phone/actions/workflows/run-tests.yml)
+[![Tests](https://img.shields.io/github/actions/workflow/status/worksome/verify-by-phone/tests.yml?label=tests&style=flat-square)](https://github.com/worksome/verify-by-phone/actions/workflows/tests.yml)
+[![Static Analysis](https://img.shields.io/github/actions/workflow/status/worksome/verify-by-phone/static.yml?label=static%20analysis&style=flat-square)](https://github.com/worksome/verify-by-phone/actions/workflows/static.yml)
 
 It's a common practice: a user signs up, you send an SMS to their phone with a code, they enter that code in your
 application and they're off to the races.
