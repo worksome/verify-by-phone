@@ -23,9 +23,9 @@ final class TwilioHttpClient implements Client
         array $params = [],
         array $data = [],
         array $headers = [],
-        string $user = null,
-        string $password = null,
-        int $timeout = null,
+        string|null $user = null,
+        string|null $password = null,
+        int|null $timeout = null,
     ): Response {
         $body = Query::build($data, PHP_QUERY_RFC1738);
 
