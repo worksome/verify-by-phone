@@ -21,7 +21,7 @@ final class FakeVerificationService implements PhoneVerificationService
     /**
      * @var null|Closure(PhoneNumber, string): void
      */
-    private null|Closure $sendUsing = null;
+    private Closure|null $sendUsing = null;
 
     /**
      * @var bool|Closure(PhoneNumber, string): bool

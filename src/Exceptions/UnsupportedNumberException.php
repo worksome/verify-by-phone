@@ -11,7 +11,7 @@ final class UnsupportedNumberException extends Exception
 {
     public function __construct(Throwable $previous)
     {
-        parent::__construct("Landline is not supported", 0, $previous);
+        parent::__construct('Landline is not supported', 0, $previous);
     }
 
     public static function fromException(Exception $exception): self

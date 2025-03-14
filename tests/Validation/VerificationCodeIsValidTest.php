@@ -23,8 +23,8 @@ it('can verify a validation code', function (mixed $phoneNumber, bool $passes) {
             // Using macro
             Rule::verificationCodeIsValid($phoneNumber),
             // Manually
-            new VerificationCodeIsValid($phoneNumber)
-        ]
+            new VerificationCodeIsValid($phoneNumber),
+        ],
     ]);
 
     expect($validator->passes())->toBe($passes);
@@ -38,7 +38,7 @@ it('returns the correct message if the code expired', function () {
     $this->service->actAsThoughTheVerificationCodeExpired();
 
     $validator = Validator::make(['code' => '1234'], [
-        'code' => [new VerificationCodeIsValid('+44 01234567890')]
+        'code' => [new VerificationCodeIsValid('+44 01234567890')],
     ]);
 
     expect($validator->errors()->get('code')[0])->toBe(
