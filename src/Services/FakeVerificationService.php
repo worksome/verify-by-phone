@@ -19,7 +19,7 @@ final class FakeVerificationService implements PhoneVerificationService
     private array $verifications = [];
 
     /**
-     * @var null|Closure(PhoneNumber, string): void
+     * @var null|Closure(PhoneNumber): void
      */
     private Closure|null $sendUsing = null;
 
@@ -28,12 +28,12 @@ final class FakeVerificationService implements PhoneVerificationService
      */
     private bool|Closure $verifyUsing = true;
 
-    public function send(PhoneNumber $number, string $channel = 'sms'): void
+    public function send(PhoneNumber $number): void
     {
         $this->verifications[] = $number->formatE164();
 
-        if ($this->sendUsing) {
-            $this->sendUsing->__invoke($number, $channel);
+        if ($this->sendUsing instanceof Closure) {
+            $this->sendUsing->__invoke($number);
         }
     }
 

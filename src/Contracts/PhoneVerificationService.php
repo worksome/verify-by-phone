@@ -16,7 +16,7 @@ interface PhoneVerificationService
      * @throws UnsupportedNumberException
      * @throws FailedSendingVerificationCodeException
      */
-    public function send(PhoneNumber $number, string $channel = 'sms'): void;
+    public function send(PhoneNumber $number): void;
 
     /**
      * @throws VerificationCodeExpiredException

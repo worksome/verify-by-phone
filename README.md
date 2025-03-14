@@ -33,6 +33,8 @@ under `driver`, or by using the dedicated `.env` variable: `VERIFY_BY_PHONE_DRIV
 To use our Twilio integration, you'll need to provide an `account_sid`, `auth_token` and `verify_sid`. All of these can
 be set in the `config/verify-by-phone.php` file under `services.twilio`.
 
+The Twilio verification channel can also be configured using the `services.twilio.channel` configuration option.
+
 ## Usage
 
 To use this package, you'll want to inject the `\Worksome\VerifyByPhone\Contracts\PhoneVerificationService`
