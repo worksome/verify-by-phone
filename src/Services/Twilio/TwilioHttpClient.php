@@ -6,6 +6,7 @@ namespace Worksome\VerifyByPhone\Services\Twilio;
 
 use GuzzleHttp\Psr7\Query;
 use Illuminate\Support\Facades\Http;
+use Twilio\AuthStrategy\AuthStrategy;
 use Twilio\Http\Client;
 use Twilio\Http\Response;
 
@@ -26,6 +27,7 @@ final class TwilioHttpClient implements Client
         string|null $user = null,
         string|null $password = null,
         int|null $timeout = null,
+        AuthStrategy|null $authStrategy = null
     ): Response {
         $body = Query::build($data, PHP_QUERY_RFC1738);
 
