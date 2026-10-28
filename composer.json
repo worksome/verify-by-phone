@@ -23,13 +23,14 @@
         "twilio/sdk": "^8.5"
     },
     "require-dev": {
+        "canvural/larastan-strict-rules": "^3.0",
         "guzzlehttp/guzzle": "^7.8",
-        "larastan/larastan": "^3.9",
+        "larastan/larastan": "^3.10",
         "nunomaduro/collision": "^7.12 || ^8.6",
         "orchestra/testbench": "^10.8 || ^11.0",
         "pestphp/pest": "^4.4",
         "pestphp/pest-plugin-laravel": "^4.1",
-        "worksome/coding-style": "^3.4"
+        "worksome/coding-style": "^6.0"
     },
     "autoload": {
         "psr-4": {
@@ -59,7 +60,8 @@
         "allow-plugins": {
             "pestphp/pest-plugin": true,
             "dealerdirect/phpcodesniffer-composer-installer": true,
-            "worksome/coding-style": true
+            "worksome/coding-style": true,
+            "phpstan/extension-installer": true
         }
     },
     "extra": {

@@ -1,13 +1,13 @@
 parameters:
 	ignoreErrors:
 		-
-			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|GMP\|int\|resource\|string\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Commands/SendVerificationCodeCommand.php
 
 		-
-			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|GMP\|int\|resource\|string\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 2
 			path: src/Commands/VerifyVerificationCodeCommand.php
@@ -19,19 +19,19 @@ parameters:
 			path: src/Services/Twilio/TwilioHttpClient.php
 
 		-
-			message: '#^Parameter \#1 \$number of class Propaganistas\\LaravelPhone\\PhoneNumber constructor expects string(?:\|null)?, mixed given\.$#'
+			message: '#^Parameter \#1 \$number of class Propaganistas\\LaravelPhone\\PhoneNumber constructor expects string, mixed given\.$#'
 			identifier: argument.type
 			count: 1
 			path: src/Validation/Rules/VerificationCodeIsValid.php
 
 		-
-			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|GMP\|int\|resource\|string\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 2
 			path: src/VerifyByPhoneManager.php
 
 		-
-			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|int\|resource\|string\|null, mixed given\.$#'
+			message: '#^Parameter \#1 \$value of function strval expects bool\|float\|GMP\|int\|resource\|string\|null, mixed given\.$#'
 			identifier: argument.type
 			count: 2
 			path: src/VerifyByPhoneServiceProvider.php
