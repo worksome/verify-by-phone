@@ -17,7 +17,7 @@
     ],
     "require": {
         "php": "^8.4",
-        "illuminate/contracts": "^12.0 || ^13.0",
+        "illuminate/contracts": "^13.0",
         "propaganistas/laravel-phone": "^6.0",
         "spatie/laravel-package-tools": "^1.93",
         "twilio/sdk": "^8.5"
@@ -27,9 +27,9 @@
         "guzzlehttp/guzzle": "^7.8",
         "larastan/larastan": "^3.10",
         "nunomaduro/collision": "^7.12 || ^8.6",
-        "orchestra/testbench": "^10.8 || ^11.0",
-        "pestphp/pest": "^4.4",
-        "pestphp/pest-plugin-laravel": "^4.1",
+        "orchestra/testbench": "^11.3",
+        "pestphp/pest": "^5.3",
+        "pestphp/pest-plugin-laravel": "^5.0",
         "worksome/coding-style": "^6.0"
     },
     "autoload": {
