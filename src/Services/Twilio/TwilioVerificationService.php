@@ -24,9 +24,9 @@ final class TwilioVerificationService implements PhoneVerificationService
 
     public const int ERROR_NOT_FOUND = 20404;
 
-    private VerificationList $verifications;
+    private readonly VerificationList $verifications;
 
-    private VerificationCheckList $verificationChecks;
+    private readonly VerificationCheckList $verificationChecks;
 
     public function __construct(Client $twilio, string $verifyId)
     {
