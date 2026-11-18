@@ -40,7 +40,6 @@ final class FakeVerificationService implements PhoneVerificationService
     public function verify(PhoneNumber $number, string $code): bool
     {
         if ($this->verifyUsing instanceof Closure) {
-            // @phpstan-ignore-next-line
             return $this->verifyUsing->__invoke($number, $code);
         }
 
